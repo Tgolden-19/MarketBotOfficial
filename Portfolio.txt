@@ -1,0 +1,35 @@
+Market_bot_portfolio
+
+Money left: 999999.8399999999
+
+
+
+
+
+
+
+
+Stocks Owned:
+
+AMZN: 0
+QQQ: 0
+AAPL: 0
+FB: 0
+AMD: 0
+
+NFLX: 0
+MSFT: 0
+TSLA: 0
+NVDA: 0
+GOOGL: 0
+GOOG: 0
+MU: 0
+TLT: 0
+TQQQ: 0
+AMRN: 0
+TLRY: 0
+INTC: 0
+ROKU: 0
+CSCO: 0
+ADBE: 0
+
