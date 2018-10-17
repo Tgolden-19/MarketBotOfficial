@@ -1,9 +1,13 @@
-Article_Titles
+Article Database
+
+
+Good: 
 
 
 
-Good:
+Apple releases new iphone
 
+Apple releases new iphone
 
-
-Bad:
+Apple releases new iphone
+Bad: 

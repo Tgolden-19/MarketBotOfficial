@@ -1,6 +1,11 @@
 from LiveStocks import live_stocks
 import re
 
+#this file holds the environmnent created from scratch that live monitors the current prices of the stock through nasdaq
+#and uses the database Portfolio.txt to maintain the current holdings over time instead of temporarily allowing for re-use
+#it also holds all functions that a normal stock investment environment/Stock market API has such as buying, selling and
+#shorting(not functioning yet) as well as the ability to return the value of your current portfolio
+
 class play_environment():
      # def __init__(self):
      #   self.file_name = "Portfolio.txt"
@@ -32,7 +37,7 @@ class play_environment():
             #print(file.read()) #for debugging
             file.write(new_file)
             #print(file.read()) #for debugging
-            play_environment.remove_money(ticker,amount)
+            play_environment.remove_money(ticker, amount)
 
 
         # with open(file_name, 'r') as file:
