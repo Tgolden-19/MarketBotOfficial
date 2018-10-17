@@ -1,5 +1,5 @@
 # MarketBotOfficial
-(in-progress)
+(A work in-progress)
 
 Working:
 - Currently has a working investment environment particularly limited to the top 20 most active stocks on the NASDAQ
