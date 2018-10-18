@@ -65,7 +65,7 @@ class play_environment():
         print("Selling!")
         stocks = str(new_amount)
         for i in re.finditer(ticker, holdings):
-            new_file = holdings[:i.end() + 1] + stocks + "\n" + holdings[i.end() + len(stocks) + 1:]
+            new_file = holdings[:i.end() + 1] + " " + stocks + "\n" + holdings[i.end() + len(stocks) + 2:]
             file.seek(0)
             file.truncate()
             #print(file.read()) #for debugging
@@ -179,8 +179,8 @@ class play_environment():
 
 
 
-#print(play_environment.sell("AMD", 20)) #test line for code sell
-#print(play_environment.buy("AMD", 20)) #test line for code buy
+#print(play_environment.sell("AMD", 160)) #test line for code sell
+#print(play_environment.buy("AMD", 100)) #test line for code buy
 #print(play_environment.get_curr_hold("AMD")) #test line for code get_curr_hold
 #print(play_environment.curr_holdings("")) #test code for curr_holdings
 #print(play_environment.get_money_left("")) #test code for get_money_left
