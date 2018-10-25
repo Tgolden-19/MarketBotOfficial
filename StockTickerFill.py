@@ -15,7 +15,7 @@ class StockSymbols:
       string = self.f.read()
       expression = re.compile("([A-Z]{1,5})\s+")
       self.arr_temp = expression.findall(string)
-   #''' Returns name of company based on recieved ticker'''
+   # Returns name of company based on recieved ticker
    def tickers_names(self):
       string2 = self.f.read()
       lines = string2.split('\n')

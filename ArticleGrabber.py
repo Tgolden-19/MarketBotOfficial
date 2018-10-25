@@ -235,4 +235,4 @@ class article_grabber(threading.Thread):
 
 
 
-print(article_grabber().find_articles_ticker('ABC'))
+#print(article_grabber().find_articles_ticker('ABC')) #for debugging
