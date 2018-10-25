@@ -12,3 +12,4 @@ In-Progress work:
 - Automating the learning and AI's intelligent determination of investment oppurtunity using news articles
 - need to implement name translation for company names to ticker
 (right now you have to specify the ticker of the company whose article is being considered)
+- previously working article search algorithim no longer functioning as intended needs futher exploring
