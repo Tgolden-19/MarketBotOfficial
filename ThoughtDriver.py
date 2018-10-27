@@ -22,7 +22,7 @@ class thought_driver():
 
     def default_logic(self):
         print("default logic")
-        run_time = input("how long would you like to run the program for?(in minutes)")
+        run_time = int(input("how long would you like to run the program for(in minutes) for each company?"))
         then = time.time()
         then = int(then / 60.00)
         print(then)
@@ -30,13 +30,19 @@ class thought_driver():
                    'TQQQ', 'AMRN', 'TLRY', 'INTC', 'ROKU', 'CSCO', 'ADBE']
         now = 0
         run = True
-        while run :
-            for j in range(len(tickers)):
-                ticker = tickers[j]
-                prev_value = 0.
-                high_price = 0.00
-                low_price = 0.00
-                curr_value = live_stocks.get_price(live_stocks.get_html(ticker))
+        print(len(tickers))
+        for j in range(len(tickers)):
+            print(j)
+            ticker = tickers[j]
+            prev_value = 0.00
+            high_price = 0.00
+            low_price = 0.00
+            perc_lower = 0.00
+            perc_higher = 0.00
+            while run:
+                curr_value = float(live_stocks.get_price(live_stocks.get_html(ticker)))
+                print(str(curr_value) + ": current value of stock for " + ticker)
+                print("=====>" + str(prev_value))
                 if(prev_value > curr_value) & (prev_value > high_price):
                     high_price = prev_value
                 if(curr_value > prev_value) & (curr_value > high_price):
@@ -45,9 +51,12 @@ class thought_driver():
                     low_price = curr_value
                 if(prev_value < curr_value) & (prev_value < low_price):
                     low_price = prev_value
-
-                perc_higher = (curr_value / low_price) * 100.00
-                perc_lower = (curr_value / high_price) * 100.00
+                if(low_price != 0.00):
+                    perc_higher = (curr_value / low_price) * 100.00
+                    print("-->" + str(perc_higher))
+                if(high_price != 0.00):
+                    perc_lower = (curr_value / high_price) * 100.00
+                    print("==>" + str(perc_lower))
 
                 if perc_lower < 92.00:
                         #amount = int(play_environment.get_curr_hold(ticker) * int(perc_lower / 100.00))
@@ -56,13 +65,17 @@ class thought_driver():
                 if perc_higher > 105.00:
                     amount = random.randint(50, 100)
                     play_environment.buy(ticker, amount)
+
                 now = time.time()
                 now = int(now / 60.00)
                 print(now)
+                #print(time.time())
                 time_passed = now - then
                 if time_passed >= run_time:
                     run = False
+                #print(curr_value)
                 prev_value = curr_value
+                #print("()()" + str(prev_value))
 
     def influenced_logic(ticker):
         print("logic is now influenced by real world events")
@@ -82,7 +95,7 @@ class thought_driver():
             good_start = temp_search.end()
             good_end = temp_search2.start()
             bad_start = temp_search2.end()
-            temp_run_time = input("How long would you like to run for?(in minutes)")
+            temp_run_time = int(input("How long would you like to run for?(in minutes)"))
             temp_run_state = True
             then = time.time()
             then = int(then / 60.00)
@@ -461,14 +474,94 @@ class thought_driver():
 
 
         #not functioning yet
-        # if(train_state == 0):
-        #     print("Running the current state of bot knowledge")
-        #     temp_search = re.search("Good:", file)
-        #     temp_search2 = re.search("Bad:", file)
-        #     good_start = temp_search.end()
-        #     good_end = temp_search2.start()
-        #     bad_start = temp_search2.end()
-        # return None
+        if(train_state == 0):
+            print("Running the current state of bot knowledge")
+            temp_search = re.search("Good:", file)
+            temp_search2 = re.search("Bad:", file)
+            temp_run_time = int(input("How long would you like to run for?(in minutes)"))
+            good_start = temp_search.end()
+            good_end = temp_search2.start()
+            bad_start = temp_search2.end()
 
-#print(thought_driver.default_logic(""))
-print(thought_driver.influenced_logic("AAPL"))
+            then = time.time()
+            then = int(then / 60.00)
+            now = 0
+            run2 = True
+            while run2:
+                article_title = input("Enter a real of fake article title...")
+                temp_search = re.search("Good:", file)
+                temp_search2 = re.search("Bad:", file)
+                good_start = temp_search.end()
+                good_end = temp_search2.start()
+                bad_start = temp_search2.end()
+                good_section = file[good_start: good_end]
+                bad_section = file[bad_start:]
+                article_words = article_title.split()
+                good_count = 0
+                bad_count = 0
+                for k in article_words:
+                    # print(k) #for debugging word splitting
+                    # for i in re.finditer(k, good_section):
+                    #     print(i)
+                    found_good = re.search(k, good_section)
+                    found_bad = re.search(k, bad_section)
+                    if found_good:
+                        good_count = good_count + 1
+                        print("found good")
+                    # for j in re.finditer(k, bad_section):
+                    #     print(j)
+                    if found_bad:
+                        bad_count = bad_count + 1
+                        print("found_bad")
+
+                if (good_count > 0) | (bad_count > 0):  # causes division by zero (small bug)
+                    perc_good = 0.00
+                    perc_bad = 0.00
+                    if (good_count > bad_count):
+                        perc_good = float(good_count / len(article_words))
+                        print(perc_good)
+                        perc_bad = 0.01
+                    else:
+                        perc_bad = float(bad_count / len(article_words))
+                        print(perc_bad)
+                        perc_good = 0.01
+
+                    if (perc_good > perc_bad) & (perc_good > 0.80):
+                        amount = random.randint(50, 100)
+                        play_environment.buy(ticker, amount)
+
+                    elif (perc_bad > perc_good) & (perc_bad > 0.80):
+                        play_environment.sell(ticker, play_environment.get_curr_hold(ticker))
+
+                    else:
+                        ask = "Is this article title [2]: " + article_title + " :Good or Bad?(G/B)"
+                        article_state = input(ask)
+                        if article_state == "G":
+                            amount = random.randint(50, 100)
+                            play_environment.buy(ticker, amount)
+
+                        if article_state == "B":
+                            play_environment.sell(ticker, play_environment.get_curr_hold(ticker))
+                else:
+                    ask = "Is this article title [3]: " + article_title + " :Good or Bad?(G/B)"
+                    article_state = input(ask)
+                    if article_state == "G":
+                        amount = random.randint(50, 100)
+                        play_environment.buy(ticker, amount)
+
+                    if article_state == "B":
+                        play_environment.sell(ticker, play_environment.get_curr_hold(ticker))
+                # cont = input("would you like to put in another article?Y/N")
+                # if cont == "N":
+                #     temp_run_state = False
+                now = time.time()
+                now = int(now / 60.00)
+                print(now)
+                time_passed = now - then
+                if time_passed >= temp_run_time:
+                    run2 = False
+                    file.close()
+        return None
+
+print(thought_driver.default_logic(""))
+#print(thought_driver.influenced_logic("AAPL"))
