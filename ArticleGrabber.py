@@ -12,7 +12,7 @@ buildargs = {
   'serviceName': 'customsearch',
   'version': 'v1',
   'developerKey': 'AIzaSyD3kW1v-aLFF8UZt1i-1Y-Vx5fdqD41sCQ'
-}
+}#place your API key and service info here
 
 class article_grabber(threading.Thread):
     def __init__(self):
@@ -31,7 +31,7 @@ class article_grabber(threading.Thread):
         self.url_return = False
         self.url_arr = ['URLs']
         self.title_arr = ['Titles']
-        self.title_arr1 = ['Titles']
+        self.title_arr1 = []
         self.title_arr2 = ['Titles']
         self.title_arr3 = ['Titles']
         self.title_arr4 = ['Titles']
@@ -55,7 +55,7 @@ class article_grabber(threading.Thread):
             }
             #print(search_word) #prints for debugging
             articles_found = search_google.api.results(buildargs, cseargs).get_values("items", "title")       #GoogleSearch().search(search_word)       #google.search(search_word, 1)
-            print(articles_found)
+            #print(articles_found)
             for i in range(len(self.search_keywords)):
                 keyword = self.search_keywords[i]
                 for j in articles_found:

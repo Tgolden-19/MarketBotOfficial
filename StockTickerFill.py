@@ -2,11 +2,11 @@ import re
 
 
 class StockSymbols:
-   def __init__(self, filename, ticker, company_name):
+   def __init__(self, filename, ticker):
        self.f = open(filename)
        self.ticker = ticker
        self.arr_temp = False
-       self.company_name = company_name
+       self.company_name = None
        self.tickers_names()
    #'''Returns array of all tickers'''
 
@@ -42,6 +42,6 @@ class StockSymbols:
       else:
         print("conflict of interest with values or no values given")
    def g(self):
-      return (self.company_name + " : " + self.ticker)
+      return (self.company_name)
 
 #print(StockSymbols('NYSE.txt', '', '').g()) #tests to confirm successful run of company name getter

@@ -106,72 +106,101 @@ class thought_driver():
                 run2 = True
                 while run2:
                     #article_title = input("Enter a real of fake article title...")
-                    article_title = article_grabber.find_articles_ticker("", ticker_auto)
-                    temp_search = re.search("Good:", file)
-                    temp_search2 = re.search("Bad:", file)
-                    good_start = temp_search.end()
-                    good_end = temp_search2.start()
-                    bad_start = temp_search2.end()
-                    good_section = file[good_start: good_end]
-                    bad_section = file[bad_start:]
-                    article_words = article_title.split()
-                    good_count = 0
-                    bad_count = 0
-                    for k in article_words:
-                        # print(k) #for debugging word splitting
-                        # for i in re.finditer(k, good_section):
-                        #     print(i)
-                        found_good = re.search(k, good_section)
-                        found_bad = re.search(k, bad_section)
-                        if found_good:
-                            good_count = good_count + 1
-                            print("found good")
-                        # for j in re.finditer(k, bad_section):
-                        #     print(j)
-                        if found_bad:
-                            bad_count = bad_count + 1
-                            print("found_bad")
+                    article_titles = article_grabber().find_articles_ticker(ticker_auto)
+                    for count in range(len(article_titles)):
+                        article_title = article_titles[count]
+                        print(article_title)
+                        temp_search = re.search("Good:", file)
+                        temp_search2 = re.search("Bad:", file)
+                        good_start = temp_search.end()
+                        good_end = temp_search2.start()
+                        bad_start = temp_search2.end()
+                        good_section = file[good_start: good_end]
+                        bad_section = file[bad_start:]
+                        article_words = article_title.split()
+                        good_count = 0
+                        bad_count = 0
+                        for k in article_words:
+                            # print(k) #for debugging word splitting
+                            # for i in re.finditer(k, good_section):
+                            #     print(i)
+                            found_good = re.search(k, good_section)
+                            found_bad = re.search(k, bad_section)
+                            if found_good:
+                                good_count = good_count + 1
+                                print("found good")
+                            # for j in re.finditer(k, bad_section):
+                            #     print(j)
+                            if found_bad:
+                                bad_count = bad_count + 1
+                                print("found_bad")
 
-                    if (good_count > 0) | (bad_count > 0):  # causes division by zero (small bug)
-                        perc_good = 0.00
-                        perc_bad = 0.00
-                        if (good_count > bad_count):
-                            perc_good = float(good_count / len(article_words))
-                            print(perc_good)
-                            perc_bad = 0.01
+                        if (good_count > 0) | (bad_count > 0):  # causes division by zero (small bug)
+                            perc_good = 0.00
+                            perc_bad = 0.00
+                            if (good_count > bad_count):
+                                perc_good = float(good_count / len(article_words))
+                                print("Good")
+                                print(perc_good)
+                                perc_bad = 0.01
+                            else:
+                                perc_bad = float(bad_count / len(article_words))
+                                print("Bad")
+                                print(perc_bad)
+                                perc_good = 0.01
+                            if (perc_good > perc_bad) & (perc_good > 0.80):
+                                new_file = file[:good_start + len(good_section)] + "\n" + article_title + "\n" + file[
+                                                                                                                 temp_search2.start():]
+                                # print(new_file)
+                                read.seek(0)
+                                read.truncate()
+                                read.write(new_file)
+                                read.close()
+                                read = open(file_name, "r+")
+                                file = read.read()
+                                amount = random.randint(50, 100)
+                                play_environment.buy(ticker, amount)
+
+                            elif (perc_bad > perc_good) & (perc_bad > 0.80):
+                                # new_file = file[:bad_start]+ "\n" + article_title
+                                # print(new_file)
+                                read.write("\n" + article_title)
+                                read.close()
+                                read = open(file_name, "r+")
+                                file = read.read()
+                                play_environment.sell(ticker, play_environment.get_curr_hold(ticker))
+
+                            else:
+                                ask = "Is this article title [2]: " + article_title + " :Good or Bad?(G/B)"
+                                article_state = input(ask)
+                                if article_state == "G":
+                                    new_file = file[:good_start + len(good_section)] + "\n" + article_title + "\n" + file[
+                                                                                                                     temp_search2.start():]
+                                    # print(new_file)  # for debugging file write
+                                    read.seek(0)
+                                    read.truncate()
+                                    read.write(new_file)
+                                    read.close()
+                                    read = open(file_name, "r+")
+                                    file = read.read()
+                                    amount = random.randint(50, 100)
+                                    play_environment.buy(ticker, amount)
+
+                                if article_state == "B":
+                                    # new_file = file[:bad_start] + "\n" + article_title  #for debugging file write
+                                    # print(new_file)  #for debugging file write
+                                    read.write("\n" + article_title)
+                                    read.close()
+                                    read = open(file_name, "r+")
+                                    file = read.read()
+                                    play_environment.sell(ticker, play_environment.get_curr_hold(ticker))
                         else:
-                            perc_bad = float(bad_count / len(article_words))
-                            print(perc_bad)
-                            perc_good = 0.01
-                        if (perc_good > perc_bad) & (perc_good > 0.80):
-                            new_file = file[:good_start + len(good_section)] + "\n" + article_title + "\n" + file[
-                                                                                                             temp_search2.start():]
-                            # print(new_file)
-                            read.seek(0)
-                            read.truncate()
-                            read.write(new_file)
-                            read.close()
-                            read = open(file_name, "r+")
-                            file = read.read()
-                            amount = random.randint(50, 100)
-                            play_environment.buy(ticker, amount)
-
-                        elif (perc_bad > perc_good) & (perc_bad > 0.80):
-                            # new_file = file[:bad_start]+ "\n" + article_title
-                            # print(new_file)
-                            read.write("\n" + article_title)
-                            read.close()
-                            read = open(file_name, "r+")
-                            file = read.read()
-                            play_environment.sell(ticker, play_environment.get_curr_hold(ticker))
-
-                        else:
-                            ask = "Is this article title [2]: " + article_title + " :Good or Bad?(G/B)"
+                            ask = "Is this article title [3]: " + article_title + " :Good or Bad?(G/B)"
                             article_state = input(ask)
                             if article_state == "G":
                                 new_file = file[:good_start + len(good_section)] + "\n" + article_title + "\n" + file[
                                                                                                                  temp_search2.start():]
-                                # print(new_file)  # for debugging file write
+                                # print(new_file)
                                 read.seek(0)
                                 read.truncate()
                                 read.write(new_file)
@@ -182,38 +211,14 @@ class thought_driver():
                                 play_environment.buy(ticker, amount)
 
                             if article_state == "B":
-                                # new_file = file[:bad_start] + "\n" + article_title  #for debugging file write
-                                # print(new_file)  #for debugging file write
+                                new_file = file[:bad_start] + "\n" + article_title
+                                # print(new_file)
                                 read.write("\n" + article_title)
                                 read.close()
                                 read = open(file_name, "r+")
                                 file = read.read()
                                 play_environment.sell(ticker, play_environment.get_curr_hold(ticker))
-                    else:
-                        ask = "Is this article title [3]: " + article_title + " :Good or Bad?(G/B)"
-                        article_state = input(ask)
-                        if article_state == "G":
-                            new_file = file[:good_start + len(good_section)] + "\n" + article_title + "\n" + file[
-                                                                                                             temp_search2.start():]
-                            # print(new_file)
-                            read.seek(0)
-                            read.truncate()
-                            read.write(new_file)
-                            read.close()
-                            read = open(file_name, "r+")
-                            file = read.read()
-                            amount = random.randint(50, 100)
-                            play_environment.buy(ticker, amount)
-
-                        if article_state == "B":
-                            new_file = file[:bad_start] + "\n" + article_title
-                            # print(new_file)
-                            read.write("\n" + article_title)
-                            read.close()
-                            read = open(file_name, "r+")
-                            file = read.read()
-                            play_environment.sell(ticker, play_environment.get_curr_hold(ticker))
-                    # cont = input("would you like to put in another article?Y/N")
+                        # cont = input("would you like to put in another article?Y/N")
                     # if cont == "N":
                     #     temp_run_state = False
                     now = time.time()
@@ -563,5 +568,5 @@ class thought_driver():
                     file.close()
         return None
 
-print(thought_driver.default_logic(""))
-#print(thought_driver.influenced_logic("AAPL"))
+#print(thought_driver.default_logic(""))
+print(thought_driver.influenced_logic("AAPL"))
